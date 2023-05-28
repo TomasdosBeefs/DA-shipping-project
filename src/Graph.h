@@ -27,6 +27,18 @@ public:
     std::vector<Vertex *> getVertexSet() const;
 
     std::vector<Vertex *> vertexSet;
+
+    std::vector<std::vector <double>> adjMatrix;
+
+
+    //Auxiliary functions
+    double Dijkstra(Vertex *v1, Vertex *v2);
+    void createAdjMatrix();
+
+    //Exercises
+
+    double exercise1();
+
 protected:
     // vertex set
 
@@ -34,6 +46,7 @@ protected:
     int **pathMatrix = nullptr;   // path matrix for Floyd-Warshall
 
     int findVertexIdx(const int &id) const;
+
 };
 
 void deleteMatrix(int **m, int n);

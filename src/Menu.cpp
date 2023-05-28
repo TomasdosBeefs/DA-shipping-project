@@ -37,6 +37,7 @@ void Menu::MainMenu(){
 
 
         if (topic_in_main_menu == 1) {
+            std::cout << file.graph.exercise1() << std::endl;
 
             //backToMainMenu();
             break;

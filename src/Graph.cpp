@@ -85,6 +85,73 @@ void deleteMatrix(double **m, int n) {
     }
 }
 
+double Graph::Dijkstra(Vertex *v1, Vertex *v2) {
+
+    for (Vertex *v: this->vertexSet) {
+        v->setVisited(false);
+        v->setDist(INF);
+    }
+
+    std::priority_queue<Vertex *> pq;
+    v1->setDist(0);
+    pq.push(v1);
+
+    while (!pq.empty()) {
+
+        Vertex *v = pq.top();
+        pq.pop();
+
+        if(v == v2) return v2->getDist();
+
+        for (Edge *e: v->getAdj()) {
+            if (e->getOrig()->getDist() + e->getWeight() < e->getDest()->getDist()) {
+                e->getDest()->setDist(e->getOrig()->getDist() + e->getWeight());
+                pq.push(e->getDest());
+            }
+        }
+
+    }
+    return v2->getDist();
+
+}
+
+void Graph::createAdjMatrix(){
+    adjMatrix.clear();
+    adjMatrix = std::vector<std::vector<double>>(vertexSet.size(),std::vector<double>(vertexSet.size(),0));
+    for(unsigned long i = 0; i < adjMatrix.size(); i++){
+        for(unsigned long j = i+1; j < adjMatrix.size(); j++){
+            double dist = Dijkstra(vertexSet[i],vertexSet[j]);
+            adjMatrix[i][j] = dist;
+            adjMatrix[j][i] = dist;
+        }
+    }
+}
+
+double Graph::exercise1(){
+    createAdjMatrix();
+    double best = INF;
+    std::vector<int> vetor;
+
+    for(int i=0; i <vertexSet.size(); i++){
+        vetor.push_back(i);
+    }
+
+    do{
+        double cur = adjMatrix[vetor.front()][vetor.back()];
+        for(unsigned long i = 1; i<vetor.size(); i++){
+            cur += adjMatrix[vetor[i-1]][vetor[i]];
+            if(cur>best)
+                i = vetor.size();
+        }
+
+        best = std::min(best, cur);
+
+    } while (std::next_permutation(vetor.begin(), vetor.end()));
+
+    return best;
+
+}
+
 Graph::~Graph() {
     deleteMatrix(distMatrix, vertexSet.size());
     deleteMatrix(pathMatrix, vertexSet.size());

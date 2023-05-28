@@ -45,18 +45,22 @@ void File_Reader::readEdges(const std::string& filename) {
         float weight = stof(distancia);
 
         // Create new vertices and edges
-        Vertex* sourceVertex = new Vertex(sourceId);
-        Vertex* destVertex = new Vertex(destId);
+        Vertex* sourceVertex = graph.findVertex(sourceId);
+        Vertex* destVertex = graph.findVertex(destId);
+        if(sourceVertex== nullptr){
+            sourceVertex = new Vertex(sourceId);
+            graph.vertexSet.push_back(sourceVertex);
+            allVertexes.insert(sourceVertex);
+        }
+        if(destVertex == nullptr){
+            destVertex = new Vertex(destId);
+            graph.vertexSet.push_back(destVertex);
+            allVertexes.insert(destVertex);
+        }
+
         Edge* newEdge = new Edge(sourceVertex, destVertex, weight);
 
-        // Add vertices and edges to the corresponding unordered sets
-
-        graph.vertexSet.push_back(sourceVertex);
-        graph.vertexSet.push_back(destVertex);
-
         //talvez se tire isto daqui
-        allVertexes.insert(sourceVertex);
-        allVertexes.insert(destVertex);
         allEdges.insert(newEdge);
 
 
@@ -96,18 +100,20 @@ void File_Reader::readTourism() {
         float weight = stof(distancia);
 
         // Create new vertices and edges
-        Vertex* sourceVertex = new Vertex(sourceId);
-        Vertex* destVertex = new Vertex(destId);
+        Vertex* sourceVertex = graph.findVertex(sourceId);
+        Vertex* destVertex = graph.findVertex(destId);
+        if(sourceVertex== nullptr){
+            sourceVertex = new Vertex(sourceId);
+            graph.vertexSet.push_back(sourceVertex);
+            allVertexes.insert(sourceVertex);
+        }
+        if(destVertex == nullptr){
+            destVertex = new Vertex(destId);
+            graph.vertexSet.push_back(destVertex);
+            allVertexes.insert(destVertex);
+        }
+
         Edge* newEdge = new Edge(sourceVertex, destVertex, weight);
-
-        // Add vertices and edges to the corresponding unordered sets
-
-        graph.vertexSet.push_back(sourceVertex);
-        graph.vertexSet.push_back(destVertex);
-
-        //talvez se tire isto daqui
-        allVertexes.insert(sourceVertex);
-        allVertexes.insert(destVertex);
         allEdges.insert(newEdge);
         vertexNames.emplace(labelOrigem, sourceVertex);
 
