@@ -11,3 +11,4 @@ CTestTestfile.cmake
 _deps
 data/*
 cmake-build-debug/*
+CMakeLists.txt
