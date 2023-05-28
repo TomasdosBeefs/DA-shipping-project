@@ -38,6 +38,7 @@ public:
     //Exercises
 
     double exercise1();
+    double exercise2();
 
 protected:
     // vertex set

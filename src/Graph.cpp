@@ -2,6 +2,7 @@
 
 #include "Graph.h"
 #include "VertexEdge.h"
+#include "MutablePriorityQueue.h"
 
 int Graph::getNumVertex() const {
     return vertexSet.size();
@@ -149,6 +150,41 @@ double Graph::exercise1(){
     } while (std::next_permutation(vetor.begin(), vetor.end()));
 
     return best;
+
+}
+
+double Graph::exercise2(){
+    MutablePriorityQueue <Vertex> q;
+    double out = 0;
+
+    for (auto &i : vertexSet){
+        i->setDist(INF);
+        i->setVisited(false);
+    }
+
+    vertexSet[0]->setDist(0);
+    q.insert(vertexSet[0]); //qual e que e aqui
+
+    while(!q.empty()){
+        auto cur = q.extractMin();
+        out+= cur->getDist() *2;
+        cur->setVisited(true);
+
+        for(auto e:cur->getAdj()){
+            if(!e->getDest()->isVisited()){
+                if(e->getDest()->getDist()==INF){
+                    e->getDest()->setDist(e->getWeight());
+                    q.insert(e->getDest());
+                }
+                else if (e->getWeight() < e->getDest()->getDist())
+                    e->getDest()->setDist(e->getWeight());
+                    q.decreaseKey(e->getDest());
+            }
+        }
+    }
+
+
+    return out;
 
 }
 

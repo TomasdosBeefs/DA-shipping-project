@@ -42,7 +42,7 @@ void Menu::MainMenu(){
             //backToMainMenu();
             break;
         } else if (topic_in_main_menu == 2) {
-
+            std::cout << file.graph.exercise2() << std::endl;
 
             //backToMainMenu();
             break;
