@@ -8,7 +8,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
-
+#include "MutablePriorityQueue.h"
 
 class Edge;
 
@@ -45,6 +45,7 @@ public:
         double latitude;
     };
 
+friend class MutablePriorityQueue<Vertex>;
 protected:
     int id;                // identifier
     std::vector<Edge *> adj;  // outgoing edges

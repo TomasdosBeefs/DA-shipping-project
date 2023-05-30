@@ -65,7 +65,7 @@ void File_Reader::readEdges(const std::string& filename) {
 
 
         // Add edge to the graph
-        graph.addEdge(sourceId, destId, weight);
+        graph.addBidirectionalEdge(sourceId, destId, weight);
         std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
     }
     ifs.close();
@@ -119,7 +119,7 @@ void File_Reader::readTourism() {
 
         // Add edge to the graph
 
-        graph.addEdge(stoi(origem), stoi(destino), stoi(distancia));
+        graph.addBidirectionalEdge(stoi(origem), stoi(destino), stoi(distancia));
         std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
     }
     ifs.close();
