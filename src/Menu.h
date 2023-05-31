@@ -19,6 +19,20 @@ public:
 
 //void backToMainMenu( );
     //void Error(const std::string &erro);
+
+    template<typename Func>
+    double exec_time(Func&& func)
+    {
+        auto startTime = std::chrono::high_resolution_clock::now();
+
+        func();
+
+        auto endTime = std::chrono::high_resolution_clock::now();
+
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+
+        return duration.count();
+    }
 };
 
 
