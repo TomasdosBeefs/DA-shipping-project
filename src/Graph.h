@@ -9,7 +9,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
-
+#include <unordered_map>
 #include "VertexEdge.h"
 
 class Graph {
@@ -51,7 +51,7 @@ protected:
 
     int findVertexIdx(const int &id) const;
 
-    void DFS(int id, std::vector<Vertex *> &path, std::vector<std::vector<Edge *>> &mst, std::vector<bool> visited);
+    void DFS(int id, std::vector<Vertex *> &path, std::vector<std::vector<Edge *>> &mst, std::vector<bool>& visited);
 
     void Prims(std::vector<std::vector<Edge *>> &mst);
 
