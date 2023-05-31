@@ -21,7 +21,7 @@ public:
     std::unordered_set<Vertex*> allVertexes;
     std::unordered_set<Edge*> allEdges;
     std::unordered_map<std::string, Vertex*> vertexNames;
-    std::unordered_map<Vertex*, Vertex::vertexCoord> vertexCoordMap;
+
 
 
 

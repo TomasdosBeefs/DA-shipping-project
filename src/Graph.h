@@ -29,11 +29,14 @@ public:
     std::vector<Vertex *> vertexSet;
 
     std::vector<std::vector <double>> adjMatrix;
+    std::unordered_map<Vertex*, Vertex::vertexCoord> vertexCoordMap;
 
 
     //Auxiliary functions
     double Dijkstra(Vertex *v1, Vertex *v2);
     void createAdjMatrix();
+
+    double haversine(double lat1, double lon1, double lat2, double lon2);
 
     //Exercises
 
@@ -48,6 +51,11 @@ protected:
 
     int findVertexIdx(const int &id) const;
 
+    void DFS(int id, std::vector<Vertex *> &path, std::vector<std::vector<Edge *>> &mst, std::vector<bool> visited);
+
+    void Prims(std::vector<std::vector<Edge *>> &mst);
+
+    double distance_calc(std::vector<Vertex *> &path);
 };
 
 void deleteMatrix(int **m, int n);
