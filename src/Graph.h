@@ -42,6 +42,7 @@ public:
 
     double exercise1();
     double exercise2();
+    double exercise3();
 
 protected:
     // vertex set
@@ -56,6 +57,11 @@ protected:
     void Prims(std::vector<std::vector<Edge *>> &mst);
 
     double distance_calc(std::vector<Vertex *> &path);
+
+    double fun(int i , int mask);
+
+    std::vector<std::vector<double>> memo;
+
 };
 
 void deleteMatrix(int **m, int n);
