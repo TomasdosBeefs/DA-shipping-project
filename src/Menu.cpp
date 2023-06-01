@@ -37,12 +37,20 @@ void Menu::MainMenu(){
 
 
         if (topic_in_main_menu == 1) {
-            std::cout << file.graph.exercise1() << std::endl;
+            double executionTime = exec_time([&]() {
+                return file.graph.exercise1();
+            });
+
+            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
             break;
         } else if (topic_in_main_menu == 2) {
-            std::cout << file.graph.exercise2() << std::endl;
+            double executionTime = exec_time([&]() {
+                return file.graph.exercise2();
+            });
+
+            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
             break;

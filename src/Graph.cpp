@@ -135,6 +135,7 @@ double Graph::exercise1(){
 
     for(int i=0; i <vertexSet.size(); i++){
         vetor.push_back(i);
+        std::cout << i << std::endl;
     }
 
     do{
@@ -146,6 +147,7 @@ double Graph::exercise1(){
         }
 
         best = std::min(best, cur);
+        std::cout << cur << std::endl;
 
     } while (std::next_permutation(vetor.begin(), vetor.end()));
 
