@@ -40,24 +40,26 @@ void Menu::MainMenu(){
             double executionTime = exec_time([&]() {
                 return file.graph.exercise1();
             });
-
+            std::cout << "Shortest path: " << file.graph.exercise1() << std::endl;
             std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
-            break;
         } else if (topic_in_main_menu == 2) {
             double executionTime = exec_time([&]() {
                 return file.graph.exercise2();
             });
-            std::cout << file.graph.exercise2();
+            std::cout << "Shortest path: " << file.graph.exercise2() << std::endl;
             std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
-            break;
         } else if (topic_in_main_menu == 3) {
+            double executionTime = exec_time([&]() {
+                return file.graph.exercise2();
+            });
+            std::cout << "Shortest path: " << file.graph.exercise2() << std::endl;
+            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
-            break;
         }
         else if (topic_in_main_menu == 0) break;
         else std::cout << "Error: Choose one number of the Main Menu.\n";
