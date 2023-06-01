@@ -42,6 +42,7 @@ public:
 
     double exercise1();
     double exercise2();
+    double exercise3();
 
 protected:
     // vertex set
@@ -56,6 +57,17 @@ protected:
     void Prims(std::vector<std::vector<Edge *>> &mst);
 
     double distance_calc(std::vector<Vertex *> &path);
+
+    void complete_matrix();
+
+    int Nearest_unvisited_vertex(std::vector<bool>& visited,int cur);
+
+    std::vector<double> nearest_neighbor_tour(std::vector<bool>& visited);
+
+    double get_distance(Vertex* v1, Vertex* v2);
+
+
+    void nearest_neighbor_tour(std::vector<bool> &visited, std::vector<Vertex *> path);
 };
 
 void deleteMatrix(int **m, int n);
