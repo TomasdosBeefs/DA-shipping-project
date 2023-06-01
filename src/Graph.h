@@ -66,8 +66,13 @@ protected:
 
     double get_distance(Vertex* v1, Vertex* v2);
 
+    double tour_length(const std::vector<int>& tour, const double** distances, const int n);
 
-    void nearest_neighbor_tour(std::vector<bool> &visited, std::vector<Vertex *> path);
+    void nearest_neighbor_tour(std::vector<bool> &visited, std::vector<Vertex *>& path);
+
+    double tour_length( std::vector<Vertex*>& tour);
+
+    void tsp_2opt( std::vector<Vertex*>& path);
 };
 
 void deleteMatrix(int **m, int n);

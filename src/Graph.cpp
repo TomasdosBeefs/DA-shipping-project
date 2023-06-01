@@ -330,9 +330,13 @@ double Graph::haversine(double lat1, double lon1, double lat2, double lon2){
 }
 
 void Graph::complete_matrix() {
+
     int size = vertexSet.size();
+    distMatrix = new double*[size];
+    for(int i = 0 ;  i < size; i++) distMatrix[i] = new double[size];
+
     for (int i = 0; i < size; i++) {
-        for (int j = i; j < size; j++) {
+        for (int j = 0; j < size; j++) {
             if (i == j) {
                 distMatrix[i][j] = 0.0;
             } else {
@@ -344,10 +348,6 @@ void Graph::complete_matrix() {
     }
 }
 
-
-
-
-}
 
 int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
 
@@ -371,7 +371,7 @@ int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
     return nearest_vertex;
 }
 
-void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*> path){
+void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*>& path){
 
     int size = vertexSet.size();
     std::vector<double> tour;
@@ -386,11 +386,22 @@ void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*
         cur = next_vertex;
     }
     path.push_back(inicial_vertex);
+
 }
 
-std::vector<Vertex*> tsp_2opt(const std::vector<Vertex*>& path) {
-    std::vector<Vertex*> new_tour = tour;
-    const int n = tour.size();
+double Graph::tour_length( std::vector<Vertex*>& tour) {
+    double length = 0.0;
+    int size = vertexSet.size();
+    for (int i = 0; i < size - 1; ++i) {
+        length += distMatrix[tour[i]->getId()][tour[i + 1]->getId()];
+    }
+    length += distMatrix[tour[size - 1]->getId()][tour[0]->getId()];
+    return length;
+}
+
+void Graph::tsp_2opt( std::vector<Vertex*>& path) {
+    std::vector<Vertex*> new_tour = path;
+    const int n = path.size();
     bool improved = true;
     while (improved) {
         improved = false;
@@ -400,9 +411,9 @@ std::vector<Vertex*> tsp_2opt(const std::vector<Vertex*>& path) {
                     continue;
                 }
                 std::reverse(new_tour.begin() + i, new_tour.begin() + j);
-                double new_length = distance_calc(new_tour);
-                if (new_length < distance_calc(tour)) {
-                    tour = new_tour;
+                double new_length = tour_length(new_tour);
+                if (new_length < tour_length(path)) {
+                    path = new_tour;
                     improved = true;
                 } else {
                     std::reverse(new_tour.begin() + i, new_tour.begin() + j);
@@ -410,7 +421,7 @@ std::vector<Vertex*> tsp_2opt(const std::vector<Vertex*>& path) {
             }
         }
     }
-    return tour;
+
 }
 
 
@@ -441,6 +452,7 @@ double Graph::exercise2(){
 
     DFS(vertexSet[0]->getId(), path, mst, visited);
     path.push_back(vertexSet[0]);
+    tsp_2opt(path);
     dist = distance_calc(path);
 
 
