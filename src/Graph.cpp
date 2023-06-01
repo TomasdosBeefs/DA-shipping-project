@@ -194,38 +194,68 @@ double Graph::exercise1(){
 
 }*/
 void Graph::Prims(std::vector<std::vector<Edge*>>& mst){
-MutablePriorityQueue <Vertex> q;
+    // Reset auxiliary info
+    for(auto v : vertexSet) {
+        v->setDist(INF);
+        v->setPath(nullptr);
+        v->setVisited(false);
+    }
+    // start with an arbitrary vertex
+    Vertex* s = vertexSet[0];
+    s->setDist(0);
+    // initialize priority queue
+    MutablePriorityQueue<Vertex> q;
+    q.insert(s);
+    // process vertices in the priority queue
+    while( ! q.empty() ) {
+        auto v = q.extractMin();
+        v->setVisited(true);
+        for(auto &e : v->getAdj()) {
+            Vertex* w = e->getDest();
+            if (!w->isVisited()) {
+                auto oldDist = w->getDist();
+                if(e->getWeight() < oldDist) {
+                    w->setDist(e->getWeight());
+                    w->setPath(e);
+                    if (oldDist == INF) {
+                        q.insert(w);
+                    }
+                    else {
+                        q.decreaseKey(w);
+                    }
+                }
+            }
+        }
+    }
+    // Construct MST from parent pointers
+    for (auto v : vertexSet) {
+        v->setVisited(false);
+    }
+
+    for (auto &i : mst) {
+        i.clear();
+    }
+
+    for (auto &v : vertexSet) {
+        if (!v->isVisited()) {
+            v->setVisited(true);
+            auto e = v->getPath();
+            if (e != nullptr) {
+                auto src = e->getOrig();
+                auto dest = e->getDest();
+                mst[src->getId()].push_back(e);
+                mst[dest->getId()].push_back(e);
+
+            }
+        }
+    }
 
 
-for (auto &i : vertexSet){
-i->setDist(INF);
-i->setVisited(false);
 }
 
-vertexSet[0]->setDist(0);
-q.insert(vertexSet[0]);
 
-while(!q.empty()){
-auto cur = q.extractMin();
-cur->setVisited(true);
 
-for(auto e:cur->getAdj()){
-if(!e->getDest()->isVisited()){
-if(e->getDest()->getDist()==INF){
-e->getDest()->setDist(e->getWeight());
-q.insert(e->getDest());
-}
-else if (e->getWeight() < e->getDest()->getDist())
-e->getDest()->setDist(e->getWeight());
-q.decreaseKey(e->getDest());
-}
-    mst[cur->getId()].push_back(e);
-}
-}
-
-}
-
-void Graph::DFS(int id, std::vector<Vertex*>& path, std::vector<std::vector<Edge*>>& mst, std::vector<bool> visited) {
+void Graph::DFS(int id, std::vector<Vertex*>& path, std::vector<std::vector<Edge*>>& mst, std::vector<bool>& visited) {
 
     Vertex* vertex = vertexSet[id];
     visited[id] = true;
@@ -242,7 +272,8 @@ double Graph::distance_calc(std::vector<Vertex*>& path){
     double dist = 0;
     bool coordinates = true;
 
-    for(int i = 0 ; i > path.size() - 1; i++ ){
+
+    for(int i = 0 ; i < path.size() - 1; i++ ){
 
         Vertex* v1 = path[i];
         Vertex* v2 = path[i+1];
@@ -300,7 +331,9 @@ double Graph::exercise2(){
     std::vector<std::vector<Edge*>> mst(vertexSet.size());
     std::vector<Vertex*> path;
     Prims(mst);
+
     DFS(vertexSet[0]->getId(), path, mst, visited);
+    path.push_back(vertexSet[0]);
     dist = distance_calc(path);
 
 
