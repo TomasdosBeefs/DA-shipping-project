@@ -1,8 +1,10 @@
 // By: Gonçalo Leão
 
+#include <cmath>
 #include "Graph.h"
 #include "VertexEdge.h"
 #include "MutablePriorityQueue.h"
+#include "File_Reader.h"
 
 int Graph::getNumVertex() const {
     return vertexSet.size();
@@ -155,7 +157,9 @@ double Graph::exercise1(){
 
 }
 
-double Graph::exercise2(){
+
+
+/*double Graph::exercise2(){
     MutablePriorityQueue <Vertex> q;
     double out = 0;
 
@@ -188,6 +192,120 @@ double Graph::exercise2(){
 
     return out;
 
+}*/
+void Graph::Prims(std::vector<std::vector<Edge*>>& mst){
+MutablePriorityQueue <Vertex> q;
+
+
+for (auto &i : vertexSet){
+i->setDist(INF);
+i->setVisited(false);
+}
+
+vertexSet[0]->setDist(0);
+q.insert(vertexSet[0]);
+
+while(!q.empty()){
+auto cur = q.extractMin();
+cur->setVisited(true);
+
+for(auto e:cur->getAdj()){
+if(!e->getDest()->isVisited()){
+if(e->getDest()->getDist()==INF){
+e->getDest()->setDist(e->getWeight());
+q.insert(e->getDest());
+}
+else if (e->getWeight() < e->getDest()->getDist())
+e->getDest()->setDist(e->getWeight());
+q.decreaseKey(e->getDest());
+}
+    mst[cur->getId()].push_back(e);
+}
+}
+
+}
+
+void Graph::DFS(int id, std::vector<Vertex*>& path, std::vector<std::vector<Edge*>>& mst, std::vector<bool> visited) {
+
+    Vertex* vertex = vertexSet[id];
+    visited[id] = true;
+    path.push_back(vertex);
+
+    for (Edge* e : (mst)[id]) {
+        if (!visited[e->getDest()->getId()]) {
+            DFS(e->getDest()->getId(), path, mst, visited);
+        }
+    }
+}
+
+double Graph::distance_calc(std::vector<Vertex*>& path){
+    double dist = 0;
+    bool coordinates = true;
+
+    for(int i = 0 ; i > path.size() - 1; i++ ){
+
+        Vertex* v1 = path[i];
+        Vertex* v2 = path[i+1];
+
+        for( Edge* e : v1->getAdj()){
+
+            if(e->getDest() == v2){
+                coordinates = false;
+                dist += e->getWeight();
+
+            }
+
+        }
+        if(coordinates){
+            double lat1 = 1,lat2 = 2,lon1 = 3,lon2 = 4;
+            lat1 = v1->vertexCoordInfo.latitude;
+            lat2 = v2->vertexCoordInfo.latitude;
+            lon1 = v1->vertexCoordInfo.longitude;
+            lon2 = v2->vertexCoordInfo.longitude;
+            dist += haversine(lat1,lon1,lat2,lon2);
+
+        }
+
+    }
+    return dist;
+}
+
+double Graph::haversine(double lat1, double lon1, double lat2, double lon2){
+    // distance between latitudes
+    // and longitudes
+    double dLat = (lat2 - lat1) *
+                  M_PI / 180.0;
+    double dLon = (lon2 - lon1) *
+                  M_PI / 180.0;
+
+    // convert to radians
+    lat1 = (lat1) * M_PI / 180.0;
+    lat2 = (lat2) * M_PI / 180.0;
+
+    // apply formulae
+    double a = pow(sin(dLat / 2), 2) +
+               pow(sin(dLon / 2), 2) *
+               cos(lat1) * cos(lat2);
+    double rad = 6371;
+    double c = 2 * asin(sqrt(a));
+    return rad * c;
+}
+
+
+double Graph::exercise2(){
+
+    double dist = 0;
+    int size = vertexSet.size();
+    std::vector<bool> visited(size, false);
+    std::vector<std::vector<Edge*>> mst(vertexSet.size());
+    std::vector<Vertex*> path;
+    Prims(mst);
+    DFS(vertexSet[0]->getId(), path, mst, visited);
+    dist = distance_calc(path);
+
+
+
+    return dist;
 }
 
 Graph::~Graph() {

@@ -66,7 +66,7 @@ void File_Reader::readEdges(const std::string& filename) {
 
         // Add edge to the graph
         graph.addBidirectionalEdge(sourceId, destId, weight);
-        std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
+        //std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
     }
     ifs.close();
 }
@@ -120,7 +120,7 @@ void File_Reader::readTourism() {
         // Add edge to the graph
 
         graph.addBidirectionalEdge(stoi(origem), stoi(destino), stoi(distancia));
-        std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
+        //std::cout << origem << " " << destino << " " << distancia << " " << std::endl;
     }
     ifs.close();
 }
@@ -152,10 +152,11 @@ void File_Reader::readRealNodes(const std::string& filename) {
         Vertex::vertexCoord coord = {Id, latId, longId};
 
         Vertex* sourceVertex = graph.findVertex(Id);
+        sourceVertex->vertexCoordInfo = coord;
 
-        vertexCoordMap.emplace(sourceVertex, coord);
+        graph.vertexCoordMap.emplace(sourceVertex, coord);
 
-        std::cout << id << " " << latitude << " " << longitude << " " << std::endl;
+        //std::cout << id << " " << latitude << " " << longitude << " " << std::endl;
     }
     ifs.close();
 }

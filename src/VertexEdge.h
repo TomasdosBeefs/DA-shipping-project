@@ -45,6 +45,8 @@ public:
         double latitude;
     };
 
+    vertexCoord vertexCoordInfo;
+
 friend class MutablePriorityQueue<Vertex>;
 protected:
     int id;                // identifier

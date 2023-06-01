@@ -49,7 +49,7 @@ void Menu::MainMenu(){
             double executionTime = exec_time([&]() {
                 return file.graph.exercise2();
             });
-
+            std::cout << file.graph.exercise2();
             std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
 
             //backToMainMenu();
