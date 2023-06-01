@@ -329,23 +329,25 @@ double Graph::haversine(double lat1, double lon1, double lat2, double lon2){
     return rad * c;
 }
 
-    void Graph::complete_matrix(){
-
-        int size = vertexSet.size();
-
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (i == j) {
-                    distMatrix[i][j] = 0.0;}
-                else {
-                    distMatrix[i][j] = get_distance(vertexSet[i], vertexSet[j]);
-                }
+void Graph::complete_matrix() {
+    int size = vertexSet.size();
+    for (int i = 0; i < size; i++) {
+        for (int j = i; j < size; j++) {
+            if (i == j) {
+                distMatrix[i][j] = 0.0;
+            } else {
+                double dist = get_distance(vertexSet[i], vertexSet[j]);
+                distMatrix[i][j] = dist;
+                distMatrix[j][i] = dist;
             }
         }
-
-
-
     }
+}
+
+
+
+
+}
 
 int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
 
@@ -384,10 +386,31 @@ void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*
         cur = next_vertex;
     }
     path.push_back(inicial_vertex);
+}
 
-
-
-
+std::vector<Vertex*> tsp_2opt(const std::vector<Vertex*>& path) {
+    std::vector<Vertex*> new_tour = tour;
+    const int n = tour.size();
+    bool improved = true;
+    while (improved) {
+        improved = false;
+        for (int i = 1; i < n - 2; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (j - i == 1) {
+                    continue;
+                }
+                std::reverse(new_tour.begin() + i, new_tour.begin() + j);
+                double new_length = distance_calc(new_tour);
+                if (new_length < distance_calc(tour)) {
+                    tour = new_tour;
+                    improved = true;
+                } else {
+                    std::reverse(new_tour.begin() + i, new_tour.begin() + j);
+                }
+            }
+        }
+    }
+    return tour;
 }
 
 
