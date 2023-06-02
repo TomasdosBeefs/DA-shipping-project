@@ -341,6 +341,46 @@ double Graph::exercise2(){
     return dist;
 }
 
+double Graph::fun(int i , int mask){
+
+    int n = vertexSet.size();
+
+    if(mask == ((1 << i) | 1))
+        return adjMatrix[0][i];
+
+    if(memo[i][mask] != 0)
+        return memo[i][mask];
+
+    double res = INF;
+
+    for( int j = 0; j < n; j++){
+
+        if((mask & (1 << j)) && j != i && j != 0)
+            res = std::min(res, fun(j,mask & (~(1 << i))) + adjMatrix[j][i]);
+    }
+    memo[i][mask] = res;
+    return res;
+}
+
+double Graph::exercise3(){
+
+    int size = vertexSet.size();
+    createAdjMatrix();
+    double ans = std::numeric_limits<double>::max();
+
+    std::vector<double> tmp(pow(2,size),0);
+    memo = std::vector<std::vector<double>>(size,tmp);
+
+    for(int i = 1 ; i < size; i++ ){
+
+        ans = std::min(ans, fun(i, (1 << (size)) - 1)
+                            + adjMatrix[i][0]);
+
+    }
+
+    return ans;
+}
+
 Graph::~Graph() {
     deleteMatrix(distMatrix, vertexSet.size());
     deleteMatrix(pathMatrix, vertexSet.size());
