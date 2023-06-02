@@ -436,6 +436,8 @@ double Graph::exercise3(){
     complete_matrix();
    nearest_neighbor_tour(visited,path);
     tsp_2opt(path);
+
+
     dist = distance_calc(path);
 
     for(int i = 0; i < path.size(); i++){
