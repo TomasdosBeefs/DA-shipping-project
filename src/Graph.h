@@ -47,7 +47,7 @@ public:
 protected:
     // vertex set
 
-    double ** distMatrix = nullptr;   // dist matrix for Floyd-Warshall
+    std::vector<std::vector<double>>  distMatrix;   // dist matrix for Floyd-Warshall
     int **pathMatrix = nullptr;   // path matrix for Floyd-Warshall
 
     int findVertexIdx(const int &id) const;

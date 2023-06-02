@@ -332,8 +332,6 @@ double Graph::haversine(double lat1, double lon1, double lat2, double lon2){
 void Graph::complete_matrix() {
 
     int size = vertexSet.size();
-    distMatrix = new double*[size];
-    for(int i = 0 ;  i < size; i++) distMatrix[i] = new double[size];
 
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
@@ -355,7 +353,7 @@ int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
 
     int nearest_vertex = -1;
 
-    int nearest_distance = INF;
+    double nearest_distance = INF;
 
     for( int i = 0; i < size; i++){
 
@@ -374,15 +372,14 @@ int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
 void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*>& path){
 
     int size = vertexSet.size();
-    std::vector<double> tour;
     int cur = 0;
     Vertex * inicial_vertex = vertexSet[0];
     visited[cur] = true;
-    tour.push_back(cur);
-    for(int i = 0 ; i < size ; i++ ){
+    path.push_back(inicial_vertex);
+    for(int i = 1 ; i < size ; i++ ){
         int next_vertex = Nearest_unvisited_vertex(visited, cur);
-        visited[next_vertex] = true;
-        path.push_back(vertexSet[i]);
+         visited[next_vertex] = true;
+        path.push_back(vertexSet[next_vertex]);
         cur = next_vertex;
     }
     path.push_back(inicial_vertex);
@@ -433,9 +430,17 @@ double Graph::exercise3(){
     std::vector<Vertex*> path;
     std::vector<bool> visited(size, false);
 
+    distMatrix = std::vector<std::vector<double>>(size, std::vector<double>(size, 0.0));
+
+
     complete_matrix();
-    nearest_neighbor_tour(visited,path);
+   nearest_neighbor_tour(visited,path);
+    tsp_2opt(path);
     dist = distance_calc(path);
+
+    for(int i = 0; i < path.size(); i++){
+        std::cout << path[i]->getId() << " ";
+    }
 
     return dist;
 }
@@ -452,7 +457,7 @@ double Graph::exercise2(){
 
     DFS(vertexSet[0]->getId(), path, mst, visited);
     path.push_back(vertexSet[0]);
-    tsp_2opt(path);
+
     dist = distance_calc(path);
 
 
@@ -461,6 +466,6 @@ double Graph::exercise2(){
 }
 
 Graph::~Graph() {
-    deleteMatrix(distMatrix, vertexSet.size());
+    //deleteMatrix(distMatrix, vertexSet.size());
     deleteMatrix(pathMatrix, vertexSet.size());
 }
