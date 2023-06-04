@@ -41,7 +41,7 @@ void Menu::MainMenu(){
                 return file.graph.exercise1();
             });
             std::cout << "Shortest path: " << file.graph.exercise1() << std::endl;
-            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
+            std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
 
             //backToMainMenu();
         } else if (topic_in_main_menu == 2) {
@@ -49,7 +49,7 @@ void Menu::MainMenu(){
                 return file.graph.exercise2();
             });
             std::cout << "Shortest path: " << file.graph.exercise2() << std::endl;
-            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
+            std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
 
             //backToMainMenu();
         } else if (topic_in_main_menu == 3) {
@@ -57,7 +57,10 @@ void Menu::MainMenu(){
                 return file.graph.exercise3();
             });
             std::cout << "Shortest path: " << file.graph.exercise3() << std::endl;
-            std::cout << "Execution time: " << executionTime/3600 << " seconds" << std::endl;
+
+
+            std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
+
 
             //backToMainMenu();
         }

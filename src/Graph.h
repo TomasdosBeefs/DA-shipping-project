@@ -58,6 +58,7 @@ protected:
 
     double distance_calc(std::vector<Vertex *> &path);
 
+
     void complete_matrix();
 
     int Nearest_unvisited_vertex(std::vector<bool>& visited,int cur);
@@ -73,6 +74,12 @@ protected:
     double tour_length( std::vector<Vertex*>& tour);
 
     void tsp_2opt( std::vector<Vertex*>& path);
+  
+    double fun(int i , int mask);
+
+    std::vector<std::vector<double>> memo;
+
+
 };
 
 void deleteMatrix(int **m, int n);
