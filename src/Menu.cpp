@@ -57,7 +57,10 @@ void Menu::MainMenu(){
                 return file.graph.exercise3();
             });
             std::cout << "Shortest path: " << file.graph.exercise3() << std::endl;
+
+
             std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
+
 
             //backToMainMenu();
         }

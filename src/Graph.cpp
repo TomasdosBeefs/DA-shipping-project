@@ -268,6 +268,33 @@ void Graph::DFS(int id, std::vector<Vertex*>& path, std::vector<std::vector<Edge
     }
 }
 
+double Graph::get_distance(Vertex* v1, Vertex* v2){
+
+        double dist = 0;
+        bool coordinates = true;
+
+    for( Edge* e : v1->getAdj()){
+
+        if(e->getDest() == v2){
+            coordinates = false;
+            dist += e->getWeight();
+
+        }
+
+    }
+    if(coordinates){
+        double lat1 = 1,lat2 = 2,lon1 = 3,lon2 = 4;
+        lat1 = v1->vertexCoordInfo.latitude;
+        lat2 = v2->vertexCoordInfo.latitude;
+        lon1 = v1->vertexCoordInfo.longitude;
+        lon2 = v2->vertexCoordInfo.longitude;
+        dist += haversine(lat1,lon1,lat2,lon2);
+
+    }
+
+    return dist;
+}
+
 double Graph::distance_calc(std::vector<Vertex*>& path){
     double dist = 0;
     bool coordinates = true;
@@ -275,27 +302,7 @@ double Graph::distance_calc(std::vector<Vertex*>& path){
 
     for(int i = 0 ; i < path.size() - 1; i++ ){
 
-        Vertex* v1 = path[i];
-        Vertex* v2 = path[i+1];
-
-        for( Edge* e : v1->getAdj()){
-
-            if(e->getDest() == v2){
-                coordinates = false;
-                dist += e->getWeight();
-
-            }
-
-        }
-        if(coordinates){
-            double lat1 = 1,lat2 = 2,lon1 = 3,lon2 = 4;
-            lat1 = v1->vertexCoordInfo.latitude;
-            lat2 = v2->vertexCoordInfo.latitude;
-            lon1 = v1->vertexCoordInfo.longitude;
-            lon2 = v2->vertexCoordInfo.longitude;
-            dist += haversine(lat1,lon1,lat2,lon2);
-
-        }
+        dist += get_distance(path[i],path[i+1]);
 
     }
     return dist;
@@ -322,10 +329,128 @@ double Graph::haversine(double lat1, double lon1, double lat2, double lon2){
     return rad * c;
 }
 
+void Graph::complete_matrix() {
+
+    int size = vertexSet.size();
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (i == j) {
+                distMatrix[i][j] = 0.0;
+            } else {
+                double dist = get_distance(vertexSet[i], vertexSet[j]);
+                distMatrix[i][j] = dist;
+                distMatrix[j][i] = dist;
+            }
+        }
+    }
+}
+
+
+int Graph::Nearest_unvisited_vertex(std::vector<bool>& visited,int cur){
+
+    int size = vertexSet.size();
+
+    int nearest_vertex = -1;
+
+    double nearest_distance = INF;
+
+    for( int i = 0; i < size; i++){
+
+        if(!visited[i] &&  distMatrix[cur][i] < nearest_distance){
+
+            nearest_vertex = i;
+
+            nearest_distance = distMatrix[cur][i];
+        }
+    }
+
+
+    return nearest_vertex;
+}
+
+void Graph::nearest_neighbor_tour(std::vector<bool>& visited,std::vector<Vertex*>& path){
+
+    int size = vertexSet.size();
+    int cur = 0;
+    Vertex * inicial_vertex = vertexSet[0];
+    visited[cur] = true;
+    path.push_back(inicial_vertex);
+    for(int i = 1 ; i < size ; i++ ){
+        int next_vertex = Nearest_unvisited_vertex(visited, cur);
+         visited[next_vertex] = true;
+        path.push_back(vertexSet[next_vertex]);
+        cur = next_vertex;
+    }
+    path.push_back(inicial_vertex);
+
+}
+
+double Graph::tour_length( std::vector<Vertex*>& tour) {
+    double length = 0.0;
+    int size = vertexSet.size();
+    for (int i = 0; i < size - 1; ++i) {
+        length += distMatrix[tour[i]->getId()][tour[i + 1]->getId()];
+    }
+    length += distMatrix[tour[size - 1]->getId()][tour[0]->getId()];
+    return length;
+}
+
+void Graph::tsp_2opt( std::vector<Vertex*>& path) {
+    std::vector<Vertex*> new_tour = path;
+    const int n = path.size();
+    bool improved = true;
+    while (improved) {
+        improved = false;
+        for (int i = 1; i < n - 2; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if (j - i == 1) {
+                    continue;
+                }
+                std::reverse(new_tour.begin() + i, new_tour.begin() + j);
+                double new_length = tour_length(new_tour);
+                if (new_length < tour_length(path)) {
+                    path = new_tour;
+                    improved = true;
+                } else {
+                    std::reverse(new_tour.begin() + i, new_tour.begin() + j);
+                }
+            }
+        }
+    }
+
+}
+
+
+
+double Graph::exercise3(){
+
+    double dist;
+    int size = vertexSet.size();
+    std::vector<Vertex*> path;
+    std::vector<bool> visited(size, false);
+
+    distMatrix = std::vector<std::vector<double>>(size, std::vector<double>(size, 0.0));
+
+
+    complete_matrix();
+   nearest_neighbor_tour(visited,path);
+    tsp_2opt(path);
+
+
+    dist = distance_calc(path);
+
+    for(int i = 0; i < path.size(); i++){
+        std::cout << path[i]->getId() << " ";
+    }
+
+    return dist;
+}
+
 
 double Graph::exercise2(){
 
-    double dist = 0;
+    double dist;
     int size = vertexSet.size();
     std::vector<bool> visited(size, false);
     std::vector<std::vector<Edge*>> mst(vertexSet.size());
@@ -334,6 +459,7 @@ double Graph::exercise2(){
 
     DFS(vertexSet[0]->getId(), path, mst, visited);
     path.push_back(vertexSet[0]);
+
     dist = distance_calc(path);
 
 
@@ -382,6 +508,6 @@ double Graph::exercise3(){
 }
 
 Graph::~Graph() {
-    deleteMatrix(distMatrix, vertexSet.size());
+    //deleteMatrix(distMatrix, vertexSet.size());
     deleteMatrix(pathMatrix, vertexSet.size());
 }

@@ -47,7 +47,7 @@ public:
 protected:
     // vertex set
 
-    double ** distMatrix = nullptr;   // dist matrix for Floyd-Warshall
+    std::vector<std::vector<double>>  distMatrix;   // dist matrix for Floyd-Warshall
     int **pathMatrix = nullptr;   // path matrix for Floyd-Warshall
 
     int findVertexIdx(const int &id) const;
@@ -58,9 +58,27 @@ protected:
 
     double distance_calc(std::vector<Vertex *> &path);
 
+
+    void complete_matrix();
+
+    int Nearest_unvisited_vertex(std::vector<bool>& visited,int cur);
+
+    std::vector<double> nearest_neighbor_tour(std::vector<bool>& visited);
+
+    double get_distance(Vertex* v1, Vertex* v2);
+
+    double tour_length(const std::vector<int>& tour, const double** distances, const int n);
+
+    void nearest_neighbor_tour(std::vector<bool> &visited, std::vector<Vertex *>& path);
+
+    double tour_length( std::vector<Vertex*>& tour);
+
+    void tsp_2opt( std::vector<Vertex*>& path);
+  
     double fun(int i , int mask);
 
     std::vector<std::vector<double>> memo;
+
 
 };
 
