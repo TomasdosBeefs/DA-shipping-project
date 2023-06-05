@@ -17,7 +17,8 @@ void Menu::MainMenu(){
     std::cout << "Select the number of the topic...\n"
                  "[1]> Backtracking algorithm (4.1)\n"
                  "[2]> Triangular Approximation Heuristic (4.2)\n"
-                 "[3]> Other Heuristics (4.3)\n"
+                 "[3]> Nearest Neighbour (4.3)\n"
+                 "[4]> Dynamic Programming (4.3)\n"
 
                  "\n[0]> Quit\n";
 
@@ -43,7 +44,7 @@ void Menu::MainMenu(){
             std::cout << "Shortest path: " << file.graph.exercise1() << std::endl;
             std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
 
-            //backToMainMenu();
+            backToMainMenu();
         } else if (topic_in_main_menu == 2) {
             double executionTime = exec_time([&]() {
                 return file.graph.exercise2();
@@ -51,7 +52,7 @@ void Menu::MainMenu(){
             std::cout << "Shortest path: " << file.graph.exercise2() << std::endl;
             std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
 
-            //backToMainMenu();
+            backToMainMenu();
         } else if (topic_in_main_menu == 3) {
             double executionTime = exec_time([&]() {
                 return file.graph.exercise3();
@@ -62,7 +63,19 @@ void Menu::MainMenu(){
             std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
 
 
-            //backToMainMenu();
+            backToMainMenu();
+        }
+        else if (topic_in_main_menu == 4) {
+            double executionTime = exec_time([&]() {
+                return file.graph.exercise3_2();
+            });
+            std::cout << "Shortest path: " << file.graph.exercise3() << std::endl;
+
+
+            std::cout << "Execution time: " << executionTime/1000 << " seconds" << std::endl;
+
+
+            backToMainMenu();
         }
         else if (topic_in_main_menu == 0) break;
         else std::cout << "Error: Choose one number of the Main Menu.\n";
@@ -142,12 +155,8 @@ Menu::Menu() {
 
 
 
-/*void Menu::Error(const std::string &erro) {
-    std::cout << "Error: " << erro << std::endl;
 
-}*/
-
-/*void Menu::backToMainMenu( ){
+void Menu::backToMainMenu( ){
     std::cout << "\n[1]> Back to Main Menu.\n"
                  "[0]> Quit.\n";
     int back;
@@ -169,4 +178,4 @@ Menu::Menu() {
                      "[0]> Quit.\n";
     }
 
-}*/
+}

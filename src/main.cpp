@@ -11,18 +11,9 @@ int main() {
 
     Menu menu;
 
-    try {
-        menu.GraphMenu();
-        menu.MainMenu();
-    }
-    catch (std::ios_base::failure &fail) {
-        //Menu::Error(fail.what());
-        return 1;
-    }
-    catch (std::exception &ex) {
-        //Menu::Error(ex.what());
-        return 1;
-    }
+
+    menu.GraphMenu();
+    menu.MainMenu();
 
     return 0;
 }
